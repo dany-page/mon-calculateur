@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculateur Structure</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .container { max-width: 500px; background: #f4f4f4; padding: 20px; border-radius: 8px; }
+        select, input { width: 100%; padding: 8px; margin: 10px 0; }
+        #resultat { font-weight: bold; color: #2c3e50; background: #ecf0f1; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Calcul de Mur / Poutre</h2>
+    
+    <label>Choisir l'essence de bois :</label>
+    <select id="select-bois">
+        <option>-- Chargement des données... --</option>
+    </select>
+
+    <label>Charge appliquée (kN) :</label>
+    <input type="number" id="charge" value="10">
+
+    <button onclick="calculer()">Lancer le calcul</button>
+
+    <div id="resultat">Résultat : ---</div>
+</div>
+
+<script>
+    let baseDeDonnees = [];
+
+    // 1. Fonction pour charger le JSON au démarrage
+    async function chargerDonnees() {
+        try {
+            const reponse = await fetch('materiaux.json');
+            const data = await reponse.json();
+            baseDeDonnees = data.bois;
+            
+            // Remplir le menu déroulant dynamiquement
+            const select = document.getElementById('select-bois');
+            select.innerHTML = ''; // Vide le message de chargement
+            
+            baseDeDonnees.forEach((essence, index) => {
+                let option = document.createElement('option');
+                option.value = index;
+                option.textContent = essence.nom;
+                select.appendChild(option);
+            });
+        } catch (erreur) {
+            console.error("Erreur de chargement :", erreur);
+            document.getElementById('resultat').textContent = "Erreur : Impossible de charger le fichier JSON.";
+        }
+    }
+
+    // 2. Fonction de calcul
+    function calculer() {
+        const index = document.getElementById('select-bois').value;
+        const charge = document.getElementById('charge').value;
+        
+        // On récupère les propriétés techniques depuis notre variable centrale
+        const essenceChoisie = baseDeDonnees[index];
+        const fb = essenceChoisie.fb;
+
+        // Exemple de formule fictive : Charge / Résistance
+        const ratio = (charge / fb).toFixed(2);
+
+        document.getElementById('resultat').textContent = 
+            `Résultat : Pour le ${essenceChoisie.nom}, le ratio est de ${ratio}. (Fb utilisé : ${fb})`;
+    }
+
+    // Lancer le chargement au démarrage
+    chargerDonnees();
+</script>
+
+</body>
+</html>

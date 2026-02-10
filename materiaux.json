@@ -1,0 +1,7 @@
+{
+  "bois": [
+    { "nom": "S-P-F (Épinette/Pin/Sapin)", "fb": 8.7, "fv": 0.5, "e": 9500 },
+    { "nom": "Douglas Fir (Mélèze)", "fb": 11.2, "fv": 0.6, "e": 11000 },
+    { "nom": "Pruche de l'Est", "fb": 8.1, "fv": 0.5, "e": 9000 }
+  ]
+}
